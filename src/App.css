@@ -1,3 +1,21 @@
+* {
+  border: 1px solid green;
+}
+
+.background {
+  background: #13a284;
+  min-height: 100vh;
+}
+
+.container-navbar {
+  border-bottom: 1px solid #4deb85;
+}
+
+.active {
+  background-color: #4deb85;
+  border-radius: 50px;
+}
+
 .App {
   text-align: center;
 }
@@ -24,15 +42,6 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+
+
