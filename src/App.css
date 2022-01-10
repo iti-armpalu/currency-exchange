@@ -4,6 +4,7 @@
 
 .background {
   background: #13a284;
+  min-height: 100vh;
 }
 
 .container-navbar {
@@ -55,6 +56,15 @@
   margin-left: 12px;
   width: 180px;
   text-align: center;
+}
+
+.content {
+  min-height: calc(100vh - 200px);
+}
+
+footer {
+  font-size: 14px;
+  height: 70px;
 }
 
 

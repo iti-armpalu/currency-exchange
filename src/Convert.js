@@ -58,9 +58,6 @@ class CurrencyConverter extends React.Component {
   render() {
     const { rate, usd, euro } = this.state;
     return (
-      <div className="background">
-        <div className="container pt-5">
-
           <div className="convert-wrap py-4">
             <div className="row convert-inner">
               <div className="col-6">
@@ -108,8 +105,6 @@ class CurrencyConverter extends React.Component {
             </div>
           </div>
            
-        </div>
-      </div>
     )
   }
 }
