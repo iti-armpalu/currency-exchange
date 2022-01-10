@@ -40,6 +40,7 @@ const App = () => {
             </div>
           </div>
         </nav>
+
       </div>
       <Switch>
         <Route path="/" exact component={Convert} />

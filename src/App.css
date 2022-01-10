@@ -4,7 +4,6 @@
 
 .background {
   background: #13a284;
-  min-height: 100vh;
 }
 
 .container-navbar {
@@ -15,6 +14,51 @@
   background-color: #4deb85;
   border-radius: 50px;
 }
+
+.convert-wrap {
+  background-color: #fff;;
+  border-radius: 5px;
+  height: 300px;
+}
+
+.convert-inner {
+  margin: 20px;
+}
+
+.currency-input {
+  background-color:transparent;
+  border-radius: 5px;
+  border: none !important;
+
+  border-radius: 0;
+
+  font-size: 32px;
+  width: 100px;
+  height: 45px;
+}
+
+.currency-name {
+  color: #a6a6a6;
+  font-size: 14px;
+}
+
+.currency-button {
+  font-size: 24px;
+  border-radius: 0;
+  width: 100px;
+  height: 45px;
+}
+
+.convert-box {
+  border-bottom: 1px solid #a6a6a6;
+  margin-right: 12px;
+  margin-left: 12px;
+  width: 180px;
+  text-align: center;
+}
+
+
+
 
 .App {
   text-align: center;
