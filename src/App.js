@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import Layout from './Layout';
 import Convert from './Convert';
-//import Rates from './Rates';
+import Rates from './Rates';
 import './App.css';
 
 const NotFound = () => {
@@ -15,7 +15,8 @@ const App = () => {
       <Layout>
         <Switch>
           <Route path="/" exact component={Convert} />
-          <Route path="/Convert/" component={Convert} />
+          <Route path="/convert/" component={Convert} />
+          <Route path="/rates/" component={Rates} />
           <Route component={NotFound} />
         </Switch>
       </Layout>
