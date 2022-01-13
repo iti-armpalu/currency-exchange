@@ -1,16 +1,16 @@
-// RatesTable.jss
+// CurrencyTable.js
 import React from 'react';
 
-// We write RatesTable as a render function, since we don't need state or life cycle methods.
-
-// It will receive two props, base and rates. There is an early return statement to not render anything when rates is null, because the rates state is set as null in the constructor of "Rates.js".
-
-const RatesTable = (props) => {
+const CurrencyTable = (props) => {
   const { base, rates } = props;
   if (!rates) {
     return null;
   }
   return (
+    <React.Fragment>
+      <div>
+        <h3>Hello New</h3>
+      </div>
     <table className="table table-sm bg-light mt-4">
       <thead>
         <tr>
@@ -27,7 +27,8 @@ const RatesTable = (props) => {
         )}
       </tbody>
     </table>
+    </React.Fragment>
   )
 }
 
-export default RatesTable;
+export default CurrencyTable
