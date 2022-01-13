@@ -42,11 +42,11 @@ const Layout = (props) => {
           <div className="d-flex justify-content-center">
             <span className="mx-3 text-white">© 2022 Iti Armpalu. All rights reserved.</span>
             <div>
-              <Link href="https://github.com/iti-armpalu" className="link-light mx-2" target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faGithub} size="lg" /></Link>
-              <Link href="https://www.linkedin.com/in/itiarmpalu/" className="link-light mx-2" target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faLinkedin} size="lg" /></Link>
-              <Link href="https://www.instagram.com/itiarmpalu/" className="link-light mx-2" target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faInstagram} size="lg" /></Link>
+              <a href="https://github.com/iti-armpalu" className="link-light mx-2" target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faGithub} size="lg" /></a>
+              <a href="https://www.linkedin.com/in/itiarmpalu/" className="link-light mx-2" target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faLinkedin} size="lg" /></a>
+              <a href="https://www.instagram.com/itiarmpalu/" className="link-light mx-2" target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faInstagram} size="lg" /></a>
             </div>
-        </div>
+          </div>
         </footer>
       </div>
     </React.Fragment>

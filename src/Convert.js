@@ -1,33 +1,53 @@
+// CurrencyConverter.js
 import React from 'react';
-import { Link } from "react-router-dom";
-import { json, checkStatus } from './utils';
+import currencies from './utils/currencies';
+import { checkStatus, json } from './utils/fetchUtils';
 
-class CurrencyInput extends React.Component {
-  render() {
-    const { value, handleChange } = this.props;
-    return <input className="currency-input" value={value} onChange={handleChange} type="number" />
-  }
-}
-
-class CurrencyConverter extends React.Component {
-
+class Convert extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      rate: 0.83,
-      usd: 1,
-      euro: 1 * 0.83,
+      rate: 0,
+      baseAcronym: 'USD',
+      baseValue: 0,
+      quoteAcronym: 'JPY',
+      quoteValue: 0,
+      loading: false,
     };
-
-    this.handleUsdChange = this.handleUsdChange.bind(this);
-    this.handleEuroChange = this.handleEuroChange.bind(this);
   }
 
-  toUsd(amount, rate) {
+  componentDidMount() {
+    const { baseAcronym, quoteAcronym } = this.state;
+    this.getRate(baseAcronym, quoteAcronym);
+  }
+
+  getRate = (base, quote) => {
+    this.setState({ loading: true });
+    fetch(`https://alt-exchange-rate.herokuapp.com/latest?base=${base}&symbols=${quote}`)
+      .then(checkStatus)
+      .then(json)
+      .then(data => {
+        if (data.error) {
+          throw new Error(data.error);
+        }
+
+        const rate = data.rates[quote];
+
+        this.setState({
+          rate,
+          baseValue: 1,
+          quoteValue: Number((1 * rate).toFixed(3)),
+          loading: false,
+        });
+      })
+      .catch(error => console.error(error.message));
+  }
+
+  toBase(amount, rate) {
     return amount * (1 / rate);
   }
 
-  toEuro(amount, rate) {
+  toQuote(amount, rate) {
     return amount * rate;
   }
 
@@ -36,77 +56,81 @@ class CurrencyConverter extends React.Component {
     if (Number.isNaN(input)) {
       return '';
     }
-    return equation(input, rate).toFixed(2);
+    return equation(input, rate).toFixed(3);
   }
 
-  // ...toUsd, toEuro
-   handleUsdChange(event) {
-    const euro = this.convert(event.target.value, this.state.rate, this.toEuro);
+  changeBaseAcronym = (event) => {
+    const baseAcronym = event.target.value;
+    this.setState({ baseAcronym });
+    this.getRate(baseAcronym, this.state.quoteAcronym);
+  }
+
+  changeBaseValue = (event) => {
+    const quoteValue = this.convert(event.target.value, this.state.rate, this.toQuote);
     this.setState({
-      usd: event.target.value,
-      euro
+      baseValue: event.target.value,
+      quoteValue,
     });
   }
-  handleEuroChange(event) {
-    const usd = this.convert(event.target.value, this.state.rate, this.toUsd);
+
+  changeQuoteAcronym = (event) => {
+    const quoteAcronym = event.target.value;
+    this.setState({ quoteAcronym });
+    this.getRate(this.state.baseAcronym, quoteAcronym);
+  }
+
+  changeQuoteValue = (event) => {
+    const baseValue = this.convert(event.target.value, this.state.rate, this.toBase);
     this.setState({
-      euro: event.target.value,
-      usd
+      quoteValue: event.target.value,
+      baseValue,
     });
   }
 
   render() {
-    const { rate, usd, euro } = this.state;
+    const { rate, baseAcronym, baseValue, quoteAcronym, quoteValue, loading } = this.state;
+
+    const currencyOptions = Object.keys(currencies).map(currencyAcronym => <option key={currencyAcronym} value={currencyAcronym}>{currencyAcronym}</option>);
+
     return (
-          <div className="convert-wrap py-4">
-            <div className="row convert-inner">
-              <div className="col-6">
-                <div className="row">
-                  <div className="col-6  convert-box">
-                    <h6>You Have</h6>
-                    <CurrencyInput value={usd} handleChange={this.handleUsdChange} />
-                  </div>
-                  <div className="col-6 text-center convert-box">
-                    <h6 className="currency-name text-center">US Dollar</h6>
-                    <div class="dropdown">
-                      <button class="btn dropdown-toggle currency-button" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        USD
-                      </button>
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
+      <React.Fragment>
+        <div className="text-center p-3">
+          <h2 className="mb-2">Currency Converter</h2>
+          <h4>1 {baseAcronym} to 1 {quoteAcronym} = {rate.toFixed(4)} {currencies[quoteAcronym].name}</h4>
+        </div>
+        <form className="form-row p-3 bg-light justify-content-center">
+          <div className="form-group col-md-5 mb-0">
+            <select value={baseAcronym} onChange={this.changeBaseAcronym} className="form-control form-control-lg mb-2" disabled={loading}>
+              {currencyOptions}
+            </select>
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <div className="input-group-text">{currencies[baseAcronym].symbol}</div>
               </div>
-              <div className="col-6">
-                <div className="row justify-content-end">
-                  <div className="col-6 convert-box">
-                    <h6>You Get</h6>
-                    <CurrencyInput value={euro} handleChange={this.handleEuroChange} />
-                  </div>
-                  <div className="col-6 text-center convert-box">
-                    <h6 className="currency-name">Euro</h6>
-                    <div class="dropdown">
-                      <button class="btn dropdown-toggle currency-button" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        EUR
-                      </button>
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <input id="base" className="form-control form-control-lg" value={baseValue} onChange={this.changeBaseValue} type="number" />
             </div>
+            <small className="text-secondary">{currencies[baseAcronym].name}</small>
           </div>
-           
+          <div className="col-md-2 py-3 d-flex justify-content-center align-items-center">
+            <h3>=</h3>
+          </div>
+          <div className="form-group col-md-5 mb-0">
+            <select value={quoteAcronym} onChange={this.changeQuoteAcronym} className="form-control form-control-lg mb-2" disabled={loading}>
+              {currencyOptions}
+            </select>
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <div className="input-group-text">{currencies[quoteAcronym].symbol}</div>
+              </div>
+              <input id="quote" className="form-control form-control-lg" value={quoteValue} onChange={this.changeQuoteValue} type="number" />
+            </div>
+            <small className="text-secondary">{currencies[quoteAcronym].name}</small>
+          </div>
+        </form>
+        <h3>Hello 3</h3>
+      </React.Fragment>
     )
   }
 }
 
-export default CurrencyConverter;
+export default Convert

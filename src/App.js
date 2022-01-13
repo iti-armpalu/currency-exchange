@@ -1,6 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Layout from './Layout';
+import ConvertOld from './ConvertOld';
 import Convert from './Convert';
 import Rates from './Rates';
 import './App.css';
@@ -14,7 +15,7 @@ const App = () => {
     <Router>
       <Layout>
         <Switch>
-          <Route path="/" exact component={Convert} />
+          <Route path="/" exact component={ConvertOld} />
           <Route path="/convert/" component={Convert} />
           <Route path="/rates/" component={Rates} />
           <Route component={NotFound} />

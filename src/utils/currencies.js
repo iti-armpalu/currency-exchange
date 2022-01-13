@@ -125,11 +125,14 @@ const currencies = {
   },
   USD: {
     symbol: '$',
-    name: 'United States dollar',
+    name: 'US dollar',
+    flag: '../images/usa.png',
   },
+
   ZAR: {
     symbol: 'R',
     name: 'South African rand',
   },
 }
+
 export default currencies;
