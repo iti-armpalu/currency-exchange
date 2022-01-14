@@ -10,7 +10,7 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
   constructor(props) {
     super(props);
     this.state = {
-      baseAcronym: 'USD',
+      base: 'USD',
       rates: null,
       loading: true,
     }
@@ -28,7 +28,7 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
   getRatesData = (base) => {
     this.setState({ loading: true });
-    fetch(`https://alt-exchange-rate.herokuapp.com/latest?base=${base}`)
+    fetch(`https://altexchangerateapi.herokuapp.com/latest?from=${base}`)
       .then(checkStatus)
       .then(json)
       .then(data => {
@@ -53,7 +53,7 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
   // Map method is used to create an array of option elements from the key values of the currencies object.
 
   render () {
-    const { baseAcronym, rates } = this.state;
+    const { base, rates, loading } = this.state;
 
     const currencyOptions = Object.keys(currencies).map(currencyAcronym => <option key={currencyAcronym} value={currencyAcronym} className="currency-option">{currencyAcronym}</option>);
 
@@ -63,27 +63,26 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
           <h2 className="mb-2">Currency Rates</h2>
         </div>
 
-        <div className="convert-wrap p-5">
+        <div className="rates-wrap p-5">
           <div className="row convert-inner">
             <div className="col-12 d-flex justify-content-center align-items-center">
               <h3 className="mb-0">Base currency: <span className="mx-2">1</span></h3>
               <div className="text-center convert-box">
-                <div className="d-flex">
-                  <img src='https://upload.wikimedia.org/wikipedia/commons/8/88/United-states_flag_icon_round.svg' className="currency-flag align-self-center" alt=""/>
-                  <select value={baseAcronym} onChange={this.changeBaseAcronym} className="form-control currency-input">
-                    {currencyOptions}
-                  </select>
-                  <span className="align-self-center"><FontAwesomeIcon icon={faChevronDown} /></span>
-                </div>
+              <div className="d-flex">
+                      <img src={currencies[base].flag} className="currency-flag align-self-center" alt=""/>
+                      <select value={base} onChange={this.changeBase} className="form-control text-start w-auto currency-input" disabled={loading}>
+                        {currencyOptions}
+                      </select>
+                      <span className="align-self-center"><FontAwesomeIcon icon={faChevronDown} /></span>
+                    </div>
               </div>
 
             </div>
                 
           </div>
 
-          <RatesTable base={baseAcronym} rates={rates} />
+          <RatesTable base={base} rates={rates} />
           </div>
-          <h3>Hello2</h3>
       </React.Fragment>
     )
   }

@@ -1,6 +1,7 @@
 // RatesTable.js
 import React from 'react';
 import { Link } from "react-router-dom";
+import currencies from './utils/currencies';
 
 // We write RatesTable as a render function, since we don't need state or life cycle methods.
 
@@ -13,19 +14,23 @@ const RatesTable = (props) => {
   }
   return (
     <React.Fragment>
-    <h3>Why not working</h3>
-    <table className="table table-sm bg-light mt-4">
+    <table className="table table-sm w-75 mx-auto">
       <thead>
         <tr>
           <th scope="col"></th>
-          <th scope="col" className="text-right pr-4 py-2">1.00 {base}</th>
         </tr>
       </thead>
       <tbody>
         {rates.map(currency =>
-          <tr key={currency.acronym}>
-            <td className="pl-4 py-2">{currency.name} <small>({currency.acronym})</small></td>
-            <td className="text-right pr-4 py-2"><Link to={`/currencyconverter?base=${base}&quote=${currency.acronym}`}>{currency.rate.toFixed(6)}</Link></td>
+          <tr key={currency.acronym} className="tr-border text-center">
+
+            <td className="px-2 py-3 align-middle table-flag"><img src={currencies[currency.acronym].flag} className="currency-flag align-self-center" alt=""/></td>
+
+            <td className="px-2 py-3 align-middle table-acronym">{currency.acronym}</td>
+
+            <td className="px-2 py-3 align-middle table-name">{currency.name}</td>
+
+            <td className="text-right px-2 py-3 align-middle table-rate"><Link to={`/convert?base=${base}&quote=${currency.acronym}`}>{currency.rate.toFixed(6)}</Link></td>
           </tr>
         )}
       </tbody>
