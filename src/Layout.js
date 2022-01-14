@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExchangeAlt, faTable } from '@fortawesome/free-solid-svg-icons'
 import { faGithub, faLinkedin, faInstagram } from '@fortawesome/free-brands-svg-icons'
@@ -19,17 +19,19 @@ const Layout = (props) => {
             </button>
             <div className="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
               <ul className="navbar-nav">
+
                 <li className="nav-item mx-3">
-                  <Link className="nav-link d-flex px-4 active" to="/convert/">
+                  <NavLink exact activeClassName="active" className="nav-link d-flex px-4" to="/convert/">
                     <span><FontAwesomeIcon icon={faExchangeAlt} size="lg" /></span>
                     <h5 className="mb-0 mx-2">Convert</h5>
-                  </Link>
+                  </NavLink>
                 </li>
+
                 <li className="nav-item mx-3">
-                  <Link className="nav-link d-flex" to="/rates/">
+                  <NavLink exact activeClassName="active" className="nav-link d-flex" to="/rates/">
                     <span><FontAwesomeIcon icon={faTable} size="lg" /></span>
                     <h5 className="mb-0 mx-2">Rates</h5>
-                  </Link>
+                  </NavLink>
                 </li>
               </ul>
             </div>

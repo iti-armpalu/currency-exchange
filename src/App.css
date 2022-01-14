@@ -42,6 +42,7 @@
   border: none !important;
   border-radius: 0;
   font-size: 32px;
+  line-height: 32px;
   height: 50px;
   text-align: center;
 }

@@ -68,9 +68,10 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
             <div className="col-12 d-flex justify-content-center align-items-center">
               <h3 className="mb-0">Base currency: <span className="mx-2">1</span></h3>
               <div className="text-center convert-box">
-              <div className="d-flex">
+              
+              <div className="d-flex justify-content-center">
                       <img src={currencies[base].flag} className="currency-flag align-self-center" alt=""/>
-                      <select value={base} onChange={this.changeBase} className="form-control text-start w-auto currency-input" disabled={loading}>
+                      <select value={base} onChange={this.changeBase} className="form-control w-auto currency-input" disabled={loading}>
                         {currencyOptions}
                       </select>
                       <span className="align-self-center"><FontAwesomeIcon icon={faChevronDown} /></span>
