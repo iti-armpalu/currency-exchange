@@ -2,13 +2,15 @@ import React from 'react';
 import currencies from './utils/currencies';
 import { checkStatus, json } from './utils/fetchUtils';
 import RatesTable from './RatesTable';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
     // A component state storing the base currency value and the currency rates, the default base currency value will be USD (just personal preference).
   class Rates extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      base: 'USD',
+      baseAcronym: 'USD',
       rates: null,
       loading: true,
     }
@@ -51,25 +53,37 @@ import RatesTable from './RatesTable';
   // Map method is used to create an array of option elements from the key values of the currencies object.
 
   render () {
-    const { base, rates,loading } = this.state;
+    const { baseAcronym, rates, loading } = this.state;
+
+    const currencyOptions = Object.keys(currencies).map(currencyAcronym => <option key={currencyAcronym} value={currencyAcronym} className="currency-option">{currencyAcronym}</option>);
 
     return (
       <React.Fragment>
-        <form className="p-3 bg-light form-inline justify-content-center">
-          <h3 className="mb-2">Base currency: <b className="mr-2">1</b></h3>
-          <select value={base} onChange={this.changeBase} className="form-control form-control-lg mb-2" disabled={loading}>
-            {Object.keys(currencies).map(currencyAcronym => <option key={currencyAcronym} value={currencyAcronym}>{currencyAcronym}</option>)}
-          </select>
-        </form>
-        <RatesTable base={base} rates={rates} />
-        <h3>Hello</h3>
-        <form className="p-3 bg-light form-inline justify-content-center">
-          <h3 className="mb-2">Base currency: <b className="mr-2">1</b></h3>
-          <select value={base} onChange={this.changeBase} className="form-control form-control-lg mb-2" disabled={loading}>
-            {Object.keys(currencies).map(currencyAcronym => <option key={currencyAcronym} value={currencyAcronym}>{currencyAcronym}</option>)}
-          </select>
-        </form>
-        <RatesTable base={base} rates={rates} />
+        <div className="text-center p-4 page-heading">
+          <h2 className="mb-2">Currency Rates</h2>
+        </div>
+
+        <div className="convert-wrap p-5">
+          <div className="row convert-inner">
+            <div className="col-12 d-flex justify-content-center align-items-center">
+              <h3 className="mb-0">Base currency: <span className="mx-2">1</span></h3>
+              <div className="text-center convert-box">
+                <div className="d-flex">
+                  <img src='https://upload.wikimedia.org/wikipedia/commons/8/88/United-states_flag_icon_round.svg' className="currency-flag align-self-center" alt=""/>
+                  <select value={baseAcronym} onChange={this.changeBaseAcronym} className="form-control currency-input">
+                    {currencyOptions}
+                  </select>
+                  <span className="align-self-center"><FontAwesomeIcon icon={faChevronDown} /></span>
+                </div>
+              </div>
+
+            </div>
+                
+          </div>
+
+          <RatesTable base={baseAcronym} rates={rates} />
+          </div>
+          <h3>Hello2</h3>
       </React.Fragment>
     )
   }

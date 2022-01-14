@@ -1,5 +1,6 @@
-// RatesTable.jss
+// RatesTable.js
 import React from 'react';
+import { Link } from "react-router-dom";
 
 // We write RatesTable as a render function, since we don't need state or life cycle methods.
 
@@ -11,6 +12,8 @@ const RatesTable = (props) => {
     return null;
   }
   return (
+    <React.Fragment>
+    <h3>Why not working</h3>
     <table className="table table-sm bg-light mt-4">
       <thead>
         <tr>
@@ -22,11 +25,12 @@ const RatesTable = (props) => {
         {rates.map(currency =>
           <tr key={currency.acronym}>
             <td className="pl-4 py-2">{currency.name} <small>({currency.acronym})</small></td>
-            <td className="text-right pr-4 py-2">{currency.rate.toFixed(6)}</td>
+            <td className="text-right pr-4 py-2"><Link to={`/currencyconverter?base=${base}&quote=${currency.acronym}`}>{currency.rate.toFixed(6)}</Link></td>
           </tr>
         )}
       </tbody>
     </table>
+    </React.Fragment>
   )
 }
 

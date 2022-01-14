@@ -1,29 +1,38 @@
-// CurrencyConverter.js
+// Convert.js
 import React from 'react';
+import Chart from 'chart.js/auto';
 import currencies from './utils/currencies';
 import { checkStatus, json } from './utils/fetchUtils';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown, faArrowAltCircleRight } from '@fortawesome/free-solid-svg-icons';
 
-class Convert extends React.Component {
+class ConvertOld extends React.Component {
   constructor(props) {
     super(props);
+
+    const params = new URLSearchParams(props.location.search);
+
     this.state = {
       rate: 0,
-      baseAcronym: 'USD',
+      baseAcronym: params.get('base') || 'USD',
       baseValue: 0,
-      quoteAcronym: 'JPY',
+      quoteAcronym: params.get('quote') || 'GBP',
       quoteValue: 0,
       loading: false,
     };
+
+    this.chartRef = React.createRef();
   }
 
   componentDidMount() {
     const { baseAcronym, quoteAcronym } = this.state;
     this.getRate(baseAcronym, quoteAcronym);
+    this.getHistoricalRates(baseAcronym, quoteAcronym);
   }
 
   getRate = (base, quote) => {
     this.setState({ loading: true });
-    fetch(`https://alt-exchange-rate.herokuapp.com/latest?base=${base}&symbols=${quote}`)
+    fetch(`https://altexchangerateapi.herokuapp.com/latest?from=${base}&to=${quote}`)
       .then(checkStatus)
       .then(json)
       .then(data => {
@@ -43,6 +52,85 @@ class Convert extends React.Component {
       .catch(error => console.error(error.message));
   }
 
+  getHistoricalRates = (base, quote) => {
+    const endDate = new Date().toISOString().split('T')[0];
+    const startDate = new Date((new Date).getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
+
+    fetch(`https://altexchangerateapi.herokuapp.com/${startDate}..${endDate}?from=${base}&to=${quote}`)
+      .then(checkStatus)
+      .then(json)
+      .then(data => {
+        if (data.error) {
+          throw new Error(data.error);
+        }
+
+        const chartLabels = Object.keys(data.rates);
+        const chartData = Object.values(data.rates).map(rate => rate[quote]);
+        const chartLabel = `${base}/${quote}`;
+        this.buildChart(chartLabels, chartData, chartLabel);
+      })
+      .catch(error => console.error(error.message));
+  }
+
+  buildChart = (labels, data, label) => {
+    const chartRef = this.chartRef.current.getContext("2d");
+
+    if (typeof this.chart !== "undefined") {
+      this.chart.destroy();
+    }
+
+    this.chart = new Chart(this.chartRef.current.getContext("2d"), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: label,
+            data,
+            fill: false,
+            tension: 0,
+            color: '#095142',
+          }
+        ]
+      },
+
+      options: {
+        responsive: true,
+        color: '#095142',
+        scales: {
+          x: {
+            grid: {
+              borderColor: '#095142'
+            },
+            ticks: {
+              color: '#095142',
+            }
+          },
+          y: {
+            grid: {
+              borderColor: '#095142'
+            },
+            ticks: {
+              color: '#095142',
+            }
+          }
+        },
+        elements: {
+          line: {
+            borderColor: '#095142',
+            borderWidth: '1'
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    })
+  }
+  
+
   toBase(amount, rate) {
     return amount * (1 / rate);
   }
@@ -56,13 +144,14 @@ class Convert extends React.Component {
     if (Number.isNaN(input)) {
       return '';
     }
-    return equation(input, rate).toFixed(3);
+    return equation(input, rate).toFixed(2);
   }
 
   changeBaseAcronym = (event) => {
     const baseAcronym = event.target.value;
     this.setState({ baseAcronym });
     this.getRate(baseAcronym, this.state.quoteAcronym);
+    this.getHistoricalRates(baseAcronym, this.state.quoteAcronym);
   }
 
   changeBaseValue = (event) => {
@@ -77,6 +166,7 @@ class Convert extends React.Component {
     const quoteAcronym = event.target.value;
     this.setState({ quoteAcronym });
     this.getRate(this.state.baseAcronym, quoteAcronym);
+    this.getHistoricalRates(this.state.baseAcronym, quoteAcronym);
   }
 
   changeQuoteValue = (event) => {
@@ -94,43 +184,75 @@ class Convert extends React.Component {
 
     return (
       <React.Fragment>
-        <div className="text-center p-3">
+
+        <div className="text-center p-4 page-heading">
           <h2 className="mb-2">Currency Converter</h2>
-          <h4>1 {baseAcronym} to 1 {quoteAcronym} = {rate.toFixed(4)} {currencies[quoteAcronym].name}</h4>
         </div>
-        <form className="form-row p-3 bg-light justify-content-center">
-          <div className="form-group col-md-5 mb-0">
-            <select value={baseAcronym} onChange={this.changeBaseAcronym} className="form-control form-control-lg mb-2" disabled={loading}>
-              {currencyOptions}
-            </select>
-            <div className="input-group">
-              <div className="input-group-prepend">
-                <div className="input-group-text">{currencies[baseAcronym].symbol}</div>
+
+          <div className="convert-wrap p-5">
+            <div className="row convert-inner justify-content-center">
+              <div className="col-12">
+                <div className="row">
+
+                  <div className="col convert-box">
+                    <h6>You Have</h6>
+                    <input id="base" className="form-control currency-input" value={baseValue} onChange={this.changeBaseValue} type="number" />
+                  </div>
+
+                  <div className="col text-center convert-box">
+                    <h6 className="currency-name">{currencies[baseAcronym].name}</h6>
+                    <div className="d-flex">
+                      <img src='https://upload.wikimedia.org/wikipedia/commons/8/88/United-states_flag_icon_round.svg' className="currency-flag align-self-center" alt=""/>
+                      <select value={baseAcronym} onChange={this.changeBaseAcronym} className="form-control currency-input" disabled={loading}>
+                        {currencyOptions}
+                      </select>
+                      <span className="align-self-center"><FontAwesomeIcon icon={faChevronDown} /></span>
+                    </div>
+                  </div>
+
+                  <div className="col-1 text-center currency-arrow">
+                    <span><FontAwesomeIcon icon={faArrowAltCircleRight} size="2x"/></span>
+                  </div>
+
+                  <div className="col convert-box">
+                    <h6>You Get</h6>
+                    <input id="quote" className="form-control currency-input" value={quoteValue} onChange={this.changeQuoteValue} type="number" />
+                  </div>
+
+                  <div className="col text-center convert-box">
+                    <h6 className="currency-name">{currencies[quoteAcronym].name}</h6>
+                    <div className="d-flex">  
+                      <img src='https://upload.wikimedia.org/wikipedia/commons/8/88/United-states_flag_icon_round.svg' className="currency-flag align-self-center" alt=""/>
+                      <select value={quoteAcronym} onChange={this.changeQuoteAcronym} className="form-control currency-input" disabled={loading}>
+                        {currencyOptions}
+                      </select>
+                      <span className="align-self-center"><FontAwesomeIcon icon={faChevronDown}/></span>
+                    </div>
+                  </div>
+
+                </div>
               </div>
-              <input id="base" className="form-control form-control-lg" value={baseValue} onChange={this.changeBaseValue} type="number" />
             </div>
-            <small className="text-secondary">{currencies[baseAcronym].name}</small>
-          </div>
-          <div className="col-md-2 py-3 d-flex justify-content-center align-items-center">
-            <h3>=</h3>
-          </div>
-          <div className="form-group col-md-5 mb-0">
-            <select value={quoteAcronym} onChange={this.changeQuoteAcronym} className="form-control form-control-lg mb-2" disabled={loading}>
-              {currencyOptions}
-            </select>
-            <div className="input-group">
-              <div className="input-group-prepend">
-                <div className="input-group-text">{currencies[quoteAcronym].symbol}</div>
-              </div>
-              <input id="quote" className="form-control form-control-lg" value={quoteValue} onChange={this.changeQuoteValue} type="number" />
+
+
+            <div className="text-center position-relative h-25">
+              <h6 className="position-absolute conversion-date">Conversion date:</h6>
+              <h6 className="position-absolute currency-base-to-quote">1 {baseAcronym} = {rate} {quoteAcronym}</h6>
             </div>
-            <small className="text-secondary">{currencies[quoteAcronym].name}</small>
           </div>
-        </form>
-        <h3>Hello 3</h3>
+
+          <div className="my-5 mx-1">
+          <div className="chart-heading my-3">
+            <h6 className="mb-0"><span>{baseAcronym}</span> to <span>{quoteAcronym}</span> Chart</h6>
+            <p className="mb-2"><span>{currencies[baseAcronym].name}</span> to <span>{currencies[quoteAcronym].name}</span></p>
+          </div>
+            <canvas ref={this.chartRef} />
+
+          </div>
+
       </React.Fragment>
     )
   }
 }
 
-export default Convert
+export default ConvertOld;
