@@ -53,7 +53,7 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
   // Map method is used to create an array of option elements from the key values of the currencies object.
 
   render () {
-    const { baseAcronym, rates, loading } = this.state;
+    const { baseAcronym, rates } = this.state;
 
     const currencyOptions = Object.keys(currencies).map(currencyAcronym => <option key={currencyAcronym} value={currencyAcronym} className="currency-option">{currencyAcronym}</option>);
 

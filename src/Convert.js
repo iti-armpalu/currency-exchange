@@ -202,7 +202,7 @@ class ConvertOld extends React.Component {
                   <div className="col text-center convert-box">
                     <h6 className="currency-name">{currencies[baseAcronym].name}</h6>
                     <div className="d-flex">
-                      <img src='https://upload.wikimedia.org/wikipedia/commons/8/88/United-states_flag_icon_round.svg' className="currency-flag align-self-center" alt=""/>
+                      <img src={currencies[baseAcronym].flag} className="currency-flag align-self-center" alt=""/>
                       <select value={baseAcronym} onChange={this.changeBaseAcronym} className="form-control currency-input" disabled={loading}>
                         {currencyOptions}
                       </select>
@@ -222,7 +222,7 @@ class ConvertOld extends React.Component {
                   <div className="col text-center convert-box">
                     <h6 className="currency-name">{currencies[quoteAcronym].name}</h6>
                     <div className="d-flex">  
-                      <img src='https://upload.wikimedia.org/wikipedia/commons/8/88/United-states_flag_icon_round.svg' className="currency-flag align-self-center" alt=""/>
+                      <img src={currencies[quoteAcronym].flag} className="currency-flag align-self-center" alt=""/>
                       <select value={quoteAcronym} onChange={this.changeQuoteAcronym} className="form-control currency-input" disabled={loading}>
                         {currencyOptions}
                       </select>
