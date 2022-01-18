@@ -28,7 +28,7 @@ const Layout = (props) => {
                 </li>
 
                 <li className="nav-item mx-3">
-                  <NavLink exact activeClassName="active" className="nav-link d-flex" to="/rates/">
+                  <NavLink exact activeClassName="active" className="nav-link d-flex px-4" to="/rates/">
                     <span><FontAwesomeIcon icon={faTable} size="lg" /></span>
                     <h5 className="mb-0 mx-2">Rates</h5>
                   </NavLink>
@@ -37,13 +37,13 @@ const Layout = (props) => {
             </div>
           </div>
         </nav>
-        <div className="container content py-5">
+        <div className="container content py-4 py-md-5">
           {props.children}
         </div>
         <footer className="container p-3">
-          <div className="d-flex justify-content-center">
-            <span className="mx-3 text-white">© 2022 Iti Armpalu. All rights reserved.</span>
-            <div>
+          <div className="d-block d-md-flex text-center justify-content-center">
+            <span className="mx-md-3 text-white">© 2022 Iti Armpalu. All rights reserved.</span>
+            <div className="mt-1 mt-md-0">
               <a href="https://github.com/iti-armpalu" className="link-light mx-2" target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faGithub} size="lg" /></a>
               <a href="https://www.linkedin.com/in/itiarmpalu/" className="link-light mx-2" target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faLinkedin} size="lg" /></a>
               <a href="https://www.instagram.com/itiarmpalu/" className="link-light mx-2" target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faInstagram} size="lg" /></a>

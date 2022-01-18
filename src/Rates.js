@@ -63,10 +63,11 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
           <h2 className="mb-2">Currency Rates</h2>
         </div>
 
-        <div className="rates-wrap p-5">
+        <div className="rates-wrap p-3 p-md-5">
           <div className="row convert-inner">
             <div className="col-12 d-flex justify-content-center align-items-center">
-              <h3 className="mb-0">Base currency: <span className="mx-2">1</span></h3>
+              <h3 className="mb-0 base-currency">Base currency: </h3>
+              <h3 className="my-0 mx-2">1</h3>
               <div className="text-center convert-box">
               
               <div className="d-flex justify-content-center">

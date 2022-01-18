@@ -1,6 +1,7 @@
 // Convert.js
 import React from 'react';
 import Chart from 'chart.js/auto';
+import ConvertDate from './ConvertDate'
 import currencies from './utils/currencies';
 import { checkStatus, json } from './utils/fetchUtils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -189,17 +190,18 @@ class ConvertOld extends React.Component {
           <h2 className="mb-2">Currency Converter</h2>
         </div>
 
-          <div className="convert-wrap p-5">
+          <div className="convert-wrap p-3 p-md-5">
             <div className="row convert-inner justify-content-center">
               <div className="col-12">
-                <div className="row">
+                <div className="row justify-content-center">
+                  
 
-                  <div className="col convert-box">
+                  <div className="col-6 col-md convert-box mt-3 mt-md-0">
                     <h6>You Have</h6>
                     <input id="base" className="form-control currency-input" value={baseValue} onChange={this.changeBaseValue} type="number" />
                   </div>
 
-                  <div className="col text-center convert-box">
+                  <div className="col-6 col-md text-center convert-box mt-3 mt-md-0">
                     <h6 className="currency-name">{currencies[baseAcronym].name}</h6>
                     <div className="d-flex">
                       <img src={currencies[baseAcronym].flag} className="currency-flag align-self-center" alt=""/>
@@ -210,16 +212,16 @@ class ConvertOld extends React.Component {
                     </div>
                   </div>
 
-                  <div className="col-1 text-center currency-arrow">
+                  <div className="col-1 d-none d-md-block text-center currency-arrow">
                     <span><FontAwesomeIcon icon={faArrowAltCircleRight} size="2x"/></span>
                   </div>
 
-                  <div className="col convert-box">
+                  <div className="col-6 col-md convert-box mt-3 mt-md-0">
                     <h6>You Get</h6>
                     <input id="quote" className="form-control currency-input" value={quoteValue} onChange={this.changeQuoteValue} type="number" />
                   </div>
 
-                  <div className="col text-center convert-box">
+                  <div className="col-6 col-md text-center convert-box mt-3 mt-md-0">
                     <h6 className="currency-name">{currencies[quoteAcronym].name}</h6>
                     <div className="d-flex">  
                       <img src={currencies[quoteAcronym].flag} className="currency-flag align-self-center" alt=""/>
@@ -235,9 +237,11 @@ class ConvertOld extends React.Component {
             </div>
 
 
-            <div className="text-center position-relative h-25">
-              <h6 className="position-absolute conversion-date">Conversion date:</h6>
-              <h6 className="position-absolute currency-base-to-quote">1 {baseAcronym} = {rate} {quoteAcronym}</h6>
+            <div className="mt-5">
+            <h6 className=" currency-base-to-quote">1 {baseAcronym} = {rate} {quoteAcronym}</h6>
+              <h6 className="conversion-date">Conversion date:
+              <ConvertDate />
+              </h6>
             </div>
           </div>
 

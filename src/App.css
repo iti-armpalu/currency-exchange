@@ -1,7 +1,4 @@
-* {
-  border: 1px solid green;
-}
-
+/*  ---- Layout Component ---- */
 .background {
   background: #13a284;
   min-height: 100vh;
@@ -16,6 +13,16 @@
   border-radius: 50px;
 }
 
+.content {
+  min-height: calc(100vh - 200px);
+}
+
+footer {
+  font-size: 14px;
+  height: 70px;
+}
+
+/*  ---- Convert & Rates Component ---- */
 .page-heading {
   color: #095142;
 }
@@ -37,13 +44,11 @@
   margin-top: 20px;
 }
 
-.currency-input {
-  background-color:transparent;
-  border: none !important;
-  border-radius: 0;
-  font-size: 32px;
-  line-height: 32px;
-  height: 50px;
+.convert-box {
+  border-bottom: 1px solid #a6a6a6;
+  margin-right: 12px;
+  margin-left: 12px;
+  width: 180px;
   text-align: center;
 }
 
@@ -71,6 +76,16 @@
   margin: auto 0;
 }
 
+.currency-input {
+  background-color:transparent;
+  border: none !important;
+  border-radius: 0;
+  font-size: 32px;
+  line-height: 32px;
+  height: 50px;
+  text-align: center;
+}
+
 .currency-base-to-quote {
   right: 220px;
   color: #a6a6a6;
@@ -82,24 +97,36 @@
   font-size: 14px;
 }
 
-.convert-box {
-  border-bottom: 1px solid #a6a6a6;
-  margin-right: 12px;
-  margin-left: 12px;
-  width: 180px;
-  text-align: center;
+@media (max-width: 992px) {
+  .currency-input {
+    font-size: 24px;
+    line-height: 24px;
+    padding: 0;
+  }
 
+  .currency-flag {
+    height: 20px;
+  }
+
+  .convert-box {
+    margin-left: 6px;
+    margin-right: 6px;
+  }
 }
 
-.content {
-  min-height: calc(100vh - 200px);
+@media (max-width: 768px) {
+  .convert-wrap {
+    height: 350px;
+  }
 }
 
-footer {
-  font-size: 14px;
-  height: 70px;
+@media (max-width: 433px) {
+  .convert-wrap {
+    height: 550px;
+  }
 }
 
+/*  ---- Chart Component ---- */
 .chart-heading {
   color: #095142;
 }
@@ -108,6 +135,7 @@ footer {
   font-size: 12px;
 }
 
+/*  ---- RatesTable Component ---- */
 .tr-border {
   border-bottom: #a6a6a6;
 }
@@ -125,6 +153,15 @@ footer {
 .table-rate a {
   color: #13a284;
 }
+
+
+
+
+
+
+
+
+
 
 
 
